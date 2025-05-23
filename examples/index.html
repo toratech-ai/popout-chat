@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ToRaTech Pop-out Widget Example</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: white;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 40px;
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+        }
+        h1 { margin-top: 0; }
+        .code-block {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+        .btn {
+            background: #338AFF;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 10px 10px 10px 0;
+            font-size: 14px;
+        }
+        .btn:hover {
+            background: #2072E8;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 ToRaTech Pop-out Widget Demo</h1>
+        <p>This page demonstrates how to integrate the ToRaTech pop-out chat widget into your website.</p>
+        
+        <h2>📦 Installation</h2>
+        <p>Include the widget files in your HTML:</p>
+        <div class="code-block">
+            <code>
+&lt;!-- Include CSS (optional, styles are also embedded in JS) --&gt;<br>
+&lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toratech-popout-widget@1.0.0/dist/widget.css"&gt;<br><br>
+&lt;!-- Include JavaScript --&gt;<br>
+&lt;script src="https://cdn.jsdelivr.net/npm/toratech-popout-widget@1.0.0/dist/widget.min.js"&gt;&lt;/script&gt;
+            </code>
+        </div>
+
+        <h2>🎯 Basic Usage</h2>
+        <div class="code-block">
+            <code>
+// Initialize with default settings<br>
+MyPopoutWidget.init();<br><br>
+// Or with custom configuration<br>
+MyPopoutWidget.init({<br>
+&nbsp;&nbsp;branding: {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;name: 'Your Support Team',<br>
+&nbsp;&nbsp;&nbsp;&nbsp;welcomeText: 'Hello! How can we help?'<br>
+&nbsp;&nbsp;},<br>
+&nbsp;&nbsp;style: {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;primaryColor: '#ff6b6b',<br>
+&nbsp;&nbsp;&nbsp;&nbsp;position: 'left'<br>
+&nbsp;&nbsp;}<br>
+});
+            </code>
+        </div>
+
+        <h2>🎮 Try It Out</h2>
+        <p>Use these buttons to test the widget functionality:</p>
+        <button class="btn" onclick="MyPopoutWidget.init()">Initialize Widget</button>
+        <button class="btn" onclick="MyPopoutWidget.open()">Open Chat</button>
+        <button class="btn" onclick="MyPopoutWidget.close()">Close Chat</button>
+        <button class="btn" onclick="customizeWidget()">Customize Style</button>
+        <button class="btn" onclick="showConfig()">Show Config</button>
+
+        <h2>📋 API Reference</h2>
+        <div class="code-block">
+            <code>
+MyPopoutWidget.init(config)     // Initialize with optional config<br>
+MyPopoutWidget.open()           // Open the chat panel<br>
+MyPopoutWidget.close()          // Close the chat panel<br>
+MyPopoutWidget.destroy()        // Remove the widget completely<br>
+MyPopoutWidget.updateConfig()   // Update configuration<br>
+MyPopoutWidget.getConfig()      // Get current configuration<br>
+MyPopoutWidget.version          // Get widget version
+            </code>
+        </div>
+
+        <p><strong>Note:</strong> The chat widget should appear in the bottom-right corner of this page once initialized!</p>
+    </div>
+
+    <!-- Load the widget -->
+    <link rel="stylesheet" href="../dist/widget.css">
+    <script src="../dist/widget.min.js"></script>
+
+    <script>
+        // Custom functions for demo
+        function customizeWidget() {
+            MyPopoutWidget.updateConfig({
+                style: {
+                    primaryColor: '#ff6b6b',
+                    position: 'left'
+                },
+                branding: {
+                    name: 'Custom Support',
+                    welcomeText: 'Hey! This is a customized widget! 🎨'
+                }
+            });
+        }
+
+        function showConfig() {
+            const config = MyPopoutWidget.getConfig();
+            alert('Current Config:\n' + JSON.stringify(config, null, 2));
+        }
+
+        // Auto-initialize the widget when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Initializing ToRaTech Pop-out Widget...');
+            MyPopoutWidget.init({
+                branding: {
+                    name: 'Demo Support',
+                    welcomeText: 'Welcome to the ToRaTech Widget Demo! 👋'
+                }
+            });
+        });
+    </script>
+</body>
+</html>

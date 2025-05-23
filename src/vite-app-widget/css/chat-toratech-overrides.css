@@ -1,0 +1,67 @@
+
+/* File: src/css/chat-toratech-overrides.css */
+:root {
+  /* Core colors */
+  --chat--color-primary:            #338AFF;  /* ToraTech blue */
+  --chat--color-primary-shade-50:   #2270CC;
+  --chat--color-primary-shade-100:  #1852AA;
+
+  --chat--color-secondary:          #20B69E;  /* Turquoise */
+  --chat--color-secondary-shade-50: #1AA890;
+
+  --chat--color-white:              #ffffff;
+  --chat--color-light:              #1a1c23;  /* Dark surface */
+  --chat--color-light-shade-50:     #2a2d35;
+  --chat--color-light-shade-100:    #383c47;
+
+  --chat--color-medium:             #5A5D6E;  /* Muted borders/text */
+  --chat--color-dark:               #E6E8ED;  /* Light text */
+  --chat--color-disabled:           #4A4D5A;
+  --chat--color-typing:             #AAAAAA;
+
+  /* Layout & sizing */
+  --chat--spacing:                  0.75rem;
+  --chat--border-radius:            0.75rem;
+  --chat--transition-duration:      0.3s;
+
+  --chat--window--width:            360px;
+  --chat--window--height:           600px;
+
+  --chat--header-height:            48px;
+  --chat--header--padding:          var(--chat--spacing);
+  --chat--header--background:       var(--chat--color-light);
+  --chat--header--color:            var(--chat--color-primary);
+  --chat--header--border-bottom:    1px solid var(--chat--color-medium);
+
+  --chat--textarea--height:         44px;
+}
+
+/* Custom styling for the Toratech chat */
+.toratech-chat-container .n8n-chat-title {
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.toratech-chat-container .n8n-chat-subtitle {
+  font-size: 0.85rem;
+  opacity: 0.9;
+}
+
+.toratech-chat-container .n8n-chat-button {
+  box-shadow: 0 4px 12px rgba(51, 138, 255, 0.3);
+}
+
+.toratech-chat-container .n8n-chat-message-bubble-bot {
+  background-color: var(--chat--color-light-shade-50);
+  border-radius: var(--chat--border-radius);
+}
+
+.toratech-chat-container .n8n-chat-message-bubble-user {
+  background-color: var(--chat--color-primary);
+  border-radius: var(--chat--border-radius);
+}
+
+.toratech-chat-container .n8n-chat-input-container {
+  background-color: var(--chat--color-light-shade-50);
+  border-top: 1px solid var(--chat--color-medium);
+}
