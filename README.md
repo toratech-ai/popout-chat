@@ -13,7 +13,14 @@ A lightweight, embeddable chat widget that provides seamless customer support in
 
 ## 📦 Installation
 
-### Via CDN (Recommended)
+### Via GitHub Pages CDN (Recommended)
+
+```html
+<!-- Include JavaScript (UMD version) -->
+<script src="https://tora-carl.github.io/popout-chat/latest/widget.umd.js"></script>
+```
+
+### Via npm CDNs
 
 ```html
 <!-- Include CSS (optional, styles are also embedded in JS) -->
@@ -178,16 +185,23 @@ npm publish
 
 ### CDN Hosting Options
 
-1. **jsDelivr** (Recommended)
+1. **GitHub Pages** (Recommended)
+   - Direct hosting from your GitHub repository
+   - Automatic deployment via GitHub Actions
+   - URLs: 
+     - Latest: `https://tora-carl.github.io/popout-chat/latest/widget.umd.js`
+     - Versioned: `https://tora-carl.github.io/popout-chat/v1.0.0/widget.umd.js`
+
+2. **jsDelivr**
    - Automatic via npm publish
    - Global CDN with excellent performance
    - Version-specific URLs
 
-2. **unpkg**
+3. **unpkg**
    - Automatic via npm publish
    - Alternative CDN option
 
-3. **Custom S3 + CloudFront**
+4. **Custom S3 + CloudFront**
    - Configure AWS credentials in GitHub secrets
    - Uncomment S3 deployment steps in `.github/workflows/build-and-deploy.yml`
 
