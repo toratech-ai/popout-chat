@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Toratech AI Widget - Simplified Example</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background: #f5f5f5;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .btn {
+            background: #338AFF;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        .btn:hover { background: #2072E8; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Toratech AI Widget - Simplified Example</h1>
+        <p>This demonstrates the basic usage of the Toratech AI pop-out chat widget.</p>
+        
+        <p>The chat widget will appear in the bottom-right corner when you click the chat button.</p>
+        <p>This example only allows opening the chat by clicking the popout button in the corner.</p>
+    </div>
+
+    <!-- Widget Configuration -->
+    <script>
+        window.ChatWidgetConfig = {
+            branding: {
+                name: 'Toratech AI Support',
+                welcomeText: 'Hi! How can we help you today?',
+                responseTimeText: 'We typically respond within minutes.',
+                logo: 'https://placehold.co/100x100?text=Toratech',
+                poweredBy: {
+                    text: 'Powered by Toratech AI',
+                    link: 'https://toratech.ai'
+                }
+            },
+            style: {
+                primaryColor: '#338AFF',
+                secondaryColor: '#2072E8',
+                position: 'right',
+                backgroundColor: '#ffffff',
+                fontColor: '#333333'
+            },
+            advanced: {
+                autoInit: true,
+                debug: true
+            }
+        };
+    </script>
+
+    <!-- Load widget script -->
+    <script src="../src/toratech-widget.js"></script>
+    
+    <script>
+        // No additional controls - widget can only be opened via the popout button
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('Toratech AI Widget loaded - click the chat button in the corner to open');
+        });
+    </script>
+</body>
+</html>

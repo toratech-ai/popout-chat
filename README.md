@@ -1,4 +1,4 @@
-# 🚀 ToRaTech Pop-out Chat Widget
+# 🚀 Toratech AI Pop-out Chat Widget
 
 A lightweight, embeddable chat widget that provides seamless customer support integration for any website.
 
@@ -56,7 +56,7 @@ npm install toratech-popout-widget
 MyPopoutWidget.init({
   branding: {
     logo: 'https://your-domain.com/logo.png',
-    name: 'Your Support Team',
+    name: 'Toratech AI Support Team',
     welcomeText: 'Hi there! 👋 How can we help you today?',
     responseTimeText: 'We typically respond within minutes.'
   },
@@ -71,8 +71,10 @@ MyPopoutWidget.init({
     autoInit: true,
     debug: false,
     zIndex: 9999,
-    storageKey: 'toratech_chat_prefs'
-  }
+    storageKey: 'toratech_chat_prefs',
+    apiVersion: 'v1'
+  },
+  webhook_url: 'https://your-backend.com/webhook/chat'
 });
 ```
 

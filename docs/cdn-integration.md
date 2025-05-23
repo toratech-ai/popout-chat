@@ -1,4 +1,4 @@
-# ToRaTech Chat Widget - CDN Integration Guide
+# Toratech AI Chat Widget - CDN Integration Guide
 
 ## Quick Start
 
@@ -10,7 +10,7 @@ Add this single line before the closing `</body>` tag:
 <script src="https://cdn.toratech.com/chat/v1/widget.min.js"></script>
 ```
 
-That's it! The widget will auto-initialize with default settings and connect to ToRaTech's managed chat service.
+That's it! The widget will auto-initialize with default settings and connect to Toratech AI's managed chat service.
 
 ### 2. Custom Configuration
 
@@ -54,27 +54,27 @@ Access the widget API after initialization:
 
 ```javascript
 // Initialize with custom config
-ToRaTechChat.init({
+ToratechAICHat.init({
   style: { primaryColor: '#custom-color' }
 });
 
 // Control the widget
-ToRaTechChat.open();     // Open chat
-ToRaTechChat.close();    // Close chat
-ToRaTechChat.destroy();  // Remove widget completely
+ToratechAICHat.open();     // Open chat
+ToratechAICHat.close();    // Close chat
+ToratechAICHat.destroy();  // Remove widget completely
 
 // Update configuration dynamically
-ToRaTechChat.updateConfig({
+ToratechAICHat.updateConfig({
   style: { position: 'left' }
 });
 
 // Get current configuration
-const config = ToRaTechChat.getConfig();
+const config = ToratechAICHat.getConfig();
 ```
 
 ## Configuration Options
 
-**Note:** Webhook settings are managed by ToRaTech and cannot be configured. All chat messages are automatically routed to ToRaTech's secure chat processing service.
+**Note:** Webhook settings are managed by Toratech AI and cannot be configured. All chat messages are automatically routed to Toratech AI's secure chat processing service.
 
 ### Branding Options
 - `branding.logo` - URL to your logo image
@@ -128,8 +128,8 @@ useEffect(() => {
   
   return () => {
     // Cleanup on unmount
-    if (window.ToRaTechChat) {
-      window.ToRaTechChat.destroy();
+    if (window.ToratechAICHat) {
+      window.ToratechAICHat.destroy();
     }
   };
 }, []);
@@ -150,8 +150,8 @@ export default {
   },
   
   beforeDestroy() {
-    if (window.ToRaTechChat) {
-      window.ToRaTechChat.destroy();
+    if (window.ToratechAICHat) {
+      window.ToratechAICHat.destroy();
     }
   }
 }
@@ -196,7 +196,7 @@ https://cdn.toratech.com/chat/beta/widget.min.js
 - Content Security Policy (CSP) compatible
 - CORS enabled for cross-origin embedding
 - XSS protection built-in
-- Secure webhook communication managed by ToRaTech
+- Secure webhook communication managed by Toratech AI
 
 ## Troubleshooting
 
