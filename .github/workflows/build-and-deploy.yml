@@ -1,182 +1,83 @@
-name: Build and Deploy Widget
+name: Build, Publish & Release Widget
 
 on:
   push:
-    branches: [ main ]
-    tags: [ 'v*' ]
-  pull_request:
-    branches: [ main ]
+    tags: ['v*']
 
 env:
   NODE_VERSION: '18'
 
+permissions:
+  contents: write  # for creating GitHub Releases
+
 jobs:
   build:
     runs-on: ubuntu-latest
-    
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - uses: actions/upload-artifact@v4
+        with:
+          name: widget-dist
+          path: dist/
 
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: ${{ env.NODE_VERSION }}
-        cache: 'npm'
-
-    - name: Install dependencies
-      run: npm ci
-
-    - name: Run build
-      run: npm run build
-
-    - name: Upload build artifacts
-      uses: actions/upload-artifact@v4
-      with:
-        name: widget-dist
-        path: dist/
-        retention-days: 30
-
-  deploy-staging:
+  publish:
     needs: build
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    
     steps:
-    - name: Download build artifacts
-      uses: actions/download-artifact@v4
-      with:
-        name: widget-dist
-        path: dist/
-
-    - name: Deploy to staging (jsDelivr via npm)
-      run: |
-        echo "Deploying to staging..."
-        echo "Files to deploy:"
-        ls -la dist/
-        # In a real scenario, you would:
-        # 1. Upload to S3 staging bucket with staging/ prefix
-        # 2. Or publish to npm with a beta tag
-        # 3. Or upload to your CDN's staging environment
-        
-        # Example for S3 (uncomment and configure):
-        # aws s3 sync dist/ s3://your-cdn-bucket/staging/ --delete
-        
-        # Example for npm beta release:
-        # npm version prerelease --preid=beta
-        # npm publish --tag beta
-
-    - name: Comment on commit with staging URL
-      uses: actions/github-script@v7
-      with:
-        script: |
-          github.rest.repos.createCommitComment({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            commit_sha: context.sha,
-            body: '🚀 **Staging Deployment Complete**\n\n' +
-                  '**Widget URLs:**\n' +
-                  '- JS: `https://cdn.jsdelivr.net/npm/toratech-popout-widget@staging/dist/widget.min.js`\n' +
-                  '- CSS: `https://cdn.jsdelivr.net/npm/toratech-popout-widget@staging/dist/widget.css`\n\n' +
-                  '**Test it:**\n' +
-                  '```html\n' +
-                  '<script src="https://cdn.jsdelivr.net/npm/toratech-popout-widget@staging/dist/widget.min.js"></script>\n' +
-                  '<script>MyPopoutWidget.init();</script>\n' +
-                  '```'
-          })
-
-  deploy-production:
-    needs: build
-    runs-on: ubuntu-latest
-    if: startsWith(github.ref, 'refs/tags/v')
-    
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: ${{ env.NODE_VERSION }}
-        cache: 'npm'
-        registry-url: 'https://registry.npmjs.org'
-
-    - name: Download build artifacts
-      uses: actions/download-artifact@v4
-      with:
-        name: widget-dist
-        path: dist/
-
-    - name: Extract version from tag
-      id: version
-      run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
-
-    - name: Update package.json version
-      run: |
-        npm version ${{ steps.version.outputs.VERSION }} --no-git-tag-version
-
-    - name: Publish to npm
-      run: npm publish
-      env:
-        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-    - name: Deploy to production CDN
-      run: |
-        echo "Deploying version ${{ steps.version.outputs.VERSION }} to production..."
-        echo "Files to deploy:"
-        ls -la dist/
-        
-        # Example for S3 + CloudFront (uncomment and configure):
-        # aws s3 sync dist/ s3://your-cdn-bucket/v${{ steps.version.outputs.VERSION }}/ --delete
-        # aws cloudfront create-invalidation --distribution-id YOUR_DISTRIBUTION_ID --paths "/*"
-        
-        # The npm publish above will automatically make it available on jsDelivr:
-        # https://cdn.jsdelivr.net/npm/toratech-popout-widget@${{ steps.version.outputs.VERSION }}/dist/widget.min.js
-
-    - name: Create GitHub Release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: ${{ github.ref }}
-        release_name: Release ${{ steps.version.outputs.VERSION }}
-        body: |
-          ## 🚀 ToRaTech Pop-out Widget v${{ steps.version.outputs.VERSION }}
-          
-          ### 📦 Installation
-          ```html
-          <!-- Via jsDelivr CDN -->
-          <script src="https://cdn.jsdelivr.net/npm/toratech-popout-widget@${{ steps.version.outputs.VERSION }}/dist/widget.min.js"></script>
-          <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toratech-popout-widget@${{ steps.version.outputs.VERSION }}/dist/widget.css">
-          
-          <!-- Via unpkg CDN -->
-          <script src="https://unpkg.com/toratech-popout-widget@${{ steps.version.outputs.VERSION }}/dist/widget.min.js"></script>
-          <link rel="stylesheet" href="https://unpkg.com/toratech-popout-widget@${{ steps.version.outputs.VERSION }}/dist/widget.css">
-          ```
-          
-          ### 🎯 Usage
-          ```javascript
-          MyPopoutWidget.init({
-            branding: {
-              name: 'Your Support Team',
-              welcomeText: 'How can we help you today?'
-            }
-          });
-          ```
-          
-          ### 📋 Files in this release
-          - `widget.min.js` - Main widget JavaScript (minified)
-          - `widget.css` - Widget styles (optional, styles are embedded in JS)
-          - Source maps for debugging
-        draft: false
-        prerelease: false
-
-    - name: Upload release assets
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./dist/widget.min.js
-        asset_name: widget.min.js
-        asset_content_type: application/javascript
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          registry-url: https://registry.npmjs.org
+      - uses: actions/download-artifact@v4
+        with:
+          name: widget-dist
+          path: dist/
+      - id: version
+        run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+      - run: npm version ${{ steps.version.outputs.VERSION }} --no-git-tag-version
+      - run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - uses: actions/create-release@v1
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ steps.version.outputs.VERSION }}
+          body: |
+            ## 🚀 Toratech AI Pop-out Widget v${{ steps.version.outputs.VERSION }}
+            
+            ### 📦 Installation
+            ```html
+            <!-- Via jsDelivr CDN (Recommended) -->
+            <script src="https://cdn.jsdelivr.net/npm/toratech-popout-widget@${{ steps.version.outputs.VERSION }}/dist/widget.umd.js"></script>
+            
+            <!-- Latest version via jsDelivr -->
+            <script src="https://cdn.jsdelivr.net/npm/toratech-popout-widget@latest/dist/widget.umd.js"></script>
+            
+            <!-- ES Module version via jsDelivr -->
+            <script type="module">
+              import MyPopoutWidget from 'https://cdn.jsdelivr.net/npm/toratech-popout-widget@${{ steps.version.outputs.VERSION }}/dist/widget.es.js';
+              // Your initialization code here
+            </script>
+            ```
+            
+            ### 🎯 Usage
+            ```javascript
+            MyPopoutWidget.init({
+              branding: {
+                name: 'Your Support Team',
+                welcomeText: 'How can we help you today?'
+              }
+            });
+            ```
+            
+            ### 📋 Files in this release
+            - `widget.min.js` - Main widget JavaScript (minified)
+            - `widget.css` - Widget styles (optional, styles are embedded in JS)
+            - Source maps for debugging

@@ -2,11 +2,14 @@
   "name": "toratech-popout-widget",
   "version": "1.0.0",
   "description": "Toratech AI Pop-out Chat Widget - A lightweight, embeddable chat widget",
-  "main": "dist/widget.min.js",
+  "main": "dist/widget.umd.js",
+  "module": "dist/widget.es.js",
+  "jsdelivr": "dist/widget.umd.js",
   "scripts": {
     "clean": "rm -rf dist",
-    "dev": "vite",
-    "build": "vite build",
+    "dev": "NODE_ENV=development vite",
+    "build": "NODE_ENV=production vite build",
+    "build:dev": "NODE_ENV=development vite build",
     "preview": "vite preview",
     "serve": "live-server --port=8080 --open=examples/index.html"
   },
@@ -29,7 +32,12 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/toratech/popout-chat-widget.git"
+    "url": "https://github.com/tora-carl/popout-chat.git"
   },
-  "homepage": "https://github.com/toratech/popout-chat-widget#readme"
+  "homepage": "https://github.com/tora-carl/popout-chat#readme",
+  "unpkg": "dist/widget.umd.js",
+  "cdn": "dist/widget.umd.js",
+  "publishConfig": {
+    "access": "public"
+  }
 }

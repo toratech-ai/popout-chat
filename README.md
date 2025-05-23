@@ -13,21 +13,29 @@ A lightweight, embeddable chat widget that provides seamless customer support in
 
 ## 📦 Installation
 
-### Via GitHub Pages CDN (Recommended)
+### Via jsDelivr CDN (Recommended)
 
 ```html
-<!-- Include JavaScript (UMD version) -->
-<script src="https://tora-carl.github.io/popout-chat/latest/widget.umd.js"></script>
+<!-- UMD version (recommended for most websites) -->
+<script src="https://cdn.jsdelivr.net/npm/toratech-popout-widget@1.0.0/dist/widget.umd.js"></script>
+
+<!-- Always use latest version -->
+<script src="https://cdn.jsdelivr.net/npm/toratech-popout-widget@latest/dist/widget.umd.js"></script>
 ```
 
-### Via npm CDNs
+### Via ES Module (For modern applications)
 
 ```html
-<!-- Include CSS (optional, styles are also embedded in JS) -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toratech-popout-widget@1.0.0/dist/widget.css">
-
-<!-- Include JavaScript -->
-<script src="https://cdn.jsdelivr.net/npm/toratech-popout-widget@1.0.0/dist/widget.min.js"></script>
+<script type="module">
+  import MyPopoutWidget from 'https://cdn.jsdelivr.net/npm/toratech-popout-widget@1.0.0/dist/widget.es.js';
+  
+  // Initialize the widget
+  MyPopoutWidget.init({
+    branding: {
+      name: 'Toratech AI Support'
+    }
+  });
+</script>
 ```
 
 ### Via npm
@@ -36,7 +44,7 @@ A lightweight, embeddable chat widget that provides seamless customer support in
 npm install toratech-popout-widget
 ```
 
-## 🎯 Quick Start
+## 🚀 Quick Start
 
 ```html
 <!DOCTYPE html>
@@ -48,7 +56,7 @@ npm install toratech-popout-widget
     <!-- Your website content -->
     
     <!-- Load the widget -->
-    <script src="https://cdn.jsdelivr.net/npm/toratech-popout-widget@1.0.0/dist/widget.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/toratech-popout-widget@1.0.0/dist/widget.umd.js"></script>
     <script>
         // Initialize with default settings
         MyPopoutWidget.init();
@@ -185,25 +193,20 @@ npm publish
 
 ### CDN Hosting Options
 
-1. **GitHub Pages** (Recommended)
-   - Direct hosting from your GitHub repository
-   - Automatic deployment via GitHub Actions
-   - URLs: 
-     - Latest: `https://tora-carl.github.io/popout-chat/latest/widget.umd.js`
-     - Versioned: `https://tora-carl.github.io/popout-chat/v1.0.0/widget.umd.js`
-
-2. **jsDelivr**
+1. **jsDelivr** (Recommended)
    - Automatic via npm publish
    - Global CDN with excellent performance
    - Version-specific URLs
+   - Automatic failover and load balancing
+   - Examples:
+     - Specific version: `https://cdn.jsdelivr.net/npm/toratech-popout-widget@1.0.0/dist/widget.umd.js`
+     - Latest version: `https://cdn.jsdelivr.net/npm/toratech-popout-widget@latest/dist/widget.umd.js`
+     - ES Module: `https://cdn.jsdelivr.net/npm/toratech-popout-widget@1.0.0/dist/widget.es.js`
 
-3. **unpkg**
+2. **unpkg** (Alternative)
    - Automatic via npm publish
    - Alternative CDN option
-
-4. **Custom S3 + CloudFront**
-   - Configure AWS credentials in GitHub secrets
-   - Uncomment S3 deployment steps in `.github/workflows/build-and-deploy.yml`
+   - Example: `https://unpkg.com/toratech-popout-widget@1.0.0/dist/widget.umd.js`
 
 ## 📊 Versioning
 
