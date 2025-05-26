@@ -50,7 +50,7 @@
         const widgetPresets = {
             default: {
                 branding: {
-                    logo: 'https://cdn.toratech.com/assets/default-logo.png',
+                    logo: 'public/img/toratech-logo.png', // Updated from CDN
                     name: 'Toratech AI Support',
                     welcomeText: 'Hi! How can we help you today?',
                     responseTimeText: 'We typically respond quickly.',
@@ -69,7 +69,7 @@
             },
             darkMode: {
                 branding: {
-                    logo: 'https://cdn.toratech.com/assets/logo-dark-mode.png', // Placeholder for a dark mode logo
+                    logo: 'public/img/toratech-logo.png', // Updated from CDN
                     name: 'Tech Support Bot',
                     welcomeText: 'System online. How can I assist?',
                     responseTimeText: 'Online now.',
@@ -88,7 +88,7 @@
             },
             brightMode: {
                 branding: {
-                    logo: 'https://cdn.toratech.com/assets/logo-bright.png', // Placeholder for a bright mode logo
+                    logo: 'public/img/toratech-logo.png', // Updated from CDN
                     name: 'Your Helper Pal',
                     welcomeText: 'Hey! Got questions? I have answers!',
                     responseTimeText: 'Happy to help!',
@@ -139,6 +139,6 @@
     </script>
 
     <!-- Load bundled widget script -->
-    <script src="https://cdn.jsdelivr.net/gh/toratech-ai/popout-chat@main/dist/widget.umd.js"></script>
+    <script src="./dist/widget.umd.js"></script>
 </body>
 </html>
