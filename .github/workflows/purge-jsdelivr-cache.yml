@@ -1,0 +1,14 @@
+name: Purge jsDelivr Cache
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  purge:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Purge jsDelivr
+        uses: egad13/purge-jsdelivr-cache@v1
+        with:
+          url: https://cdn.jsdelivr.net/gh/toratech-ai/popout-chat@main/dist/widget.umd.js
