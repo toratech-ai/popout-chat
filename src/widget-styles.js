@@ -22,8 +22,8 @@ export const WIDGET_STYLES =
     z-index: 9999;
     display: none;
     flex-direction: column;
-    width: 400px;
-    height: 550px;
+    width: 520px;
+    height: 715px;
     max-height: 80vh;
     background-color: var(--chat-color-background);
     border-radius: 10px;
