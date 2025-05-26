@@ -215,16 +215,12 @@ export const WIDGET_STYLES =
     flex-grow: 1;
     border: 1px solid #ddd;
     border-radius: 20px;
-    padding: 10px 15px;
+    padding: 11px 15px 9px 15px;
     font-size: 14px;
-    line-height: 1.4;
-    box-sizing: border-box;
-    height: 50px;
-    min-height: 50px;
-    min-width: 0;
+    line-height: 16px;
     resize: none;
+    box-sizing: border-box;
     font-family: inherit;
-    overflow-y: hidden;
   }
 
   .toratech-chat-widget .chat-input textarea:focus {
