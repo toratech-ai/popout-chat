@@ -490,6 +490,7 @@ function addMessageToDisplay(messagesContainer, messageText, senderClass, logFun
 }
 async function startNewConversation(elements, generateSessionIdFunc, setSessionId, addMessageFunc, logFunc) {
   const sessionId = generateSessionIdFunc();
+  setSessionId(sessionId);
   if (logFunc) logFunc(`Starting new conversation with session ID: ${sessionId}`);
   elements.chatContainer.querySelector(".brand-header").style.display = "flex";
   elements.chatContainer.querySelector(".new-conversation").style.display = "none";
@@ -529,7 +530,7 @@ async function sendMessage(elements, message, addMessageFunc, logFunc, config2) 
     try {
       const requestData = {
         action: "sendMessage",
-        sessionId: config2.sessionId || "default-session",
+        sessionId: config2.currentSessionId || "default-session",
         route: config2.webhook_route || "general",
         chatInput: message,
         metadata: {
@@ -594,6 +595,7 @@ async function sendMessage(elements, message, addMessageFunc, logFunc, config2) 
  * @version 1.0.0
  * @license MIT
  */
+let currentSessionId = "";
 let widgetElements = null;
 let config = { ...DEFAULT_CONFIG };
 let isInitialized = false;
@@ -604,6 +606,7 @@ function log(message, type = "info") {
   log$1(message, type, config);
 }
 function setCurrentSessionId(sessionId) {
+  currentSessionId = sessionId;
 }
 function init(customConfig) {
   if (isInitialized) {
@@ -656,7 +659,8 @@ function init(customConfig) {
   widgetElements.sendButton.addEventListener("click", () => {
     const message = widgetElements.textarea.value.trim();
     if (message) {
-      sendMessage(widgetElements, message, addMessageToDisplay, log, config);
+      const configWithSession = { ...config, currentSessionId };
+      sendMessage(widgetElements, message, addMessageToDisplay, log, configWithSession);
       widgetElements.textarea.value = "";
     }
   });
@@ -665,7 +669,8 @@ function init(customConfig) {
       e.preventDefault();
       const message = widgetElements.textarea.value.trim();
       if (message) {
-        sendMessage(widgetElements, message, addMessageToDisplay, log, config);
+        const configWithSession = { ...config, currentSessionId };
+        sendMessage(widgetElements, message, addMessageToDisplay, log, configWithSession);
         widgetElements.textarea.value = "";
       }
     }

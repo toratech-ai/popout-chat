@@ -132,143 +132,6 @@ export function loadInitialChatInterface(container, config, logFunc, callbacks) 
 }
 
 /**
- * Initiates a new conversation session.
- * Makes an API call to the webhook, updates UI, and displays initial bot message.
- * @param {Object} config - The widget configuration object.
- * @param {Function} logFunc - Logging function.
- * @param {Function} generateSessionIdFunc - Function to generate a new session ID.
- * @param {Function} newSessionIdSetter - Callback to set the new session ID in the parent scope.
- * @param {Object} uiElements - Object containing references to UI elements (newConversationScreen, chatInterfaceScreen, messagesContainerElement).
- * @param {Function} addMessageFunc - Function to add a message to the display.
- */
-export async function initiateNewConversationSession(config, logFunc, generateSessionIdFunc, newSessionIdSetter, uiElements, addMessageFunc) {
-  if (!config.webhook_url) {
-    if (logFunc) logFunc('Error: webhook_url not configured for new conversation.', 'error');
-    // Optionally, still show chat interface but with an error or different message.
-    if (uiElements.newConversationScreen) uiElements.newConversationScreen.style.display = 'none';
-    if (uiElements.chatInterfaceScreen) uiElements.chatInterfaceScreen.style.display = 'flex'; // Or 'block'
-    if (addMessageFunc && uiElements.messagesContainerElement) {
-      addMessageFunc(uiElements.messagesContainerElement, 'Chat service is currently unavailable (webhook not configured).', 'bot', logFunc);
-    }
-    return;
-  }
-
-  const newSessionId = generateSessionIdFunc();
-  newSessionIdSetter(newSessionId);
-  if (logFunc) logFunc('Attempting to start new conversation session:', newSessionId);
-
-  const requestData = [{
-    action: "loadPreviousSession", // Or a specific 'startNewSession' action if API supports
-    sessionId: newSessionId,
-    route: config.webhook_route || "general", // Use configured route or fallback
-    metadata: {
-      userId: "" // Or a user identifier if available
-    }
-  }];
-
-  try {
-    const response = await fetch(config.webhook_url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(requestData)
-    });
-
-    if (!response.ok) {
-      throw new Error(`API request failed with status ${response.status}`);
-    }
-
-    const responseData = await response.json();
-    const botMessage = Array.isArray(responseData) && responseData.length > 0 ? responseData[0].output : responseData.output;
-
-    if (uiElements.newConversationScreen) uiElements.newConversationScreen.style.display = 'none';
-    if (uiElements.chatInterfaceScreen) uiElements.chatInterfaceScreen.style.display = 'flex'; // Or 'block'
-    
-    if (botMessage && addMessageFunc && uiElements.messagesContainerElement) {
-      addMessageFunc(uiElements.messagesContainerElement, botMessage, 'bot', logFunc);
-    }
-    if (logFunc) logFunc('New conversation started successfully. Session ID:', newSessionId);
-
-  } catch (error) {
-    if (logFunc) logFunc('Error starting new conversation session:', error, 'error');
-    // Fallback: show chat interface and an error message
-    if (uiElements.newConversationScreen) uiElements.newConversationScreen.style.display = 'none';
-    if (uiElements.chatInterfaceScreen) uiElements.chatInterfaceScreen.style.display = 'flex';
-    if (addMessageFunc && uiElements.messagesContainerElement) {
-      addMessageFunc(uiElements.messagesContainerElement, 'Sorry, I could not start a new conversation. Please try again later.', 'bot', logFunc);
-    }
-  }
-}
-
-/**
- * Submits a message from the user to the server and displays the response.
- * @param {Object} config - The widget configuration object.
- * @param {Function} logFunc - Logging function.
- * @param {string} currentSessionId - The active session ID.
- * @param {string} messageText - The text of the message to send.
- * @param {Object} uiElements - Object containing references to UI elements (messagesContainerElement).
- * @param {Function} addMessageFunc - Function to add a message to the display.
- */
-export async function submitMessageToServer(config, logFunc, currentSessionId, messageText, uiElements, addMessageFunc) {
-  if (!config.webhook_url) {
-    if (logFunc) logFunc('Error: webhook_url not configured for sending message.', 'error');
-    if (addMessageFunc && uiElements.messagesContainerElement) {
-      addMessageFunc(uiElements.messagesContainerElement, 'Cannot send message: Chat service is not configured.', 'bot', logFunc);
-    }
-    return;
-  }
-  if (!currentSessionId) {
-    if (logFunc) logFunc('Error: No active session ID for sending message.', 'error');
-    if (addMessageFunc && uiElements.messagesContainerElement) {
-      addMessageFunc(uiElements.messagesContainerElement, 'Cannot send message: No active session. Please start a new conversation.', 'bot', logFunc);
-    }
-    return;
-  }
-
-  if (logFunc) logFunc(`Sending message: "${messageText}" for session ID: ${currentSessionId}`);
-
-  // Display user's message immediately
-  if (addMessageFunc && uiElements.messagesContainerElement) {
-    addMessageFunc(uiElements.messagesContainerElement, messageText, 'user', logFunc);
-  }
-
-  const requestData = {
-    action: "sendMessage",
-    sessionId: currentSessionId,
-    route: "general", // Or as per config
-    chatInput: messageText,
-    metadata: {
-      userId: "" // Or a user identifier if available
-    }
-  };
-
-  try {
-    const response = await fetch(config.webhook_url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(requestData)
-    });
-
-    if (!response.ok) {
-      throw new Error(`API request failed with status ${response.status}`);
-    }
-
-    const responseData = await response.json();
-    const botMessage = Array.isArray(responseData) && responseData.length > 0 ? responseData[0].output : responseData.output;
-
-    if (botMessage && addMessageFunc && uiElements.messagesContainerElement) {
-      addMessageFunc(uiElements.messagesContainerElement, botMessage, 'bot', logFunc);
-    }
-    if (logFunc) logFunc('Message sent and response received.');
-
-  } catch (error) {
-    if (logFunc) logFunc('Error sending message or processing response:', error, 'error');
-    if (addMessageFunc && uiElements.messagesContainerElement) {
-      addMessageFunc(uiElements.messagesContainerElement, 'Sorry, I encountered an error sending your message. Please try again.', 'bot', logFunc);
-    }
-  }
-}
-
-/**
  * Starts a new conversation in the chat widget.
  * @param {Object} elements - Object containing references to UI elements.
  * @param {Function} generateSessionIdFunc - Function to generate a new session ID.
@@ -344,10 +207,12 @@ export async function sendMessage(elements, message, addMessageFunc, logFunc, co
     if (logFunc) logFunc('Sending message to webhook: ' + config.webhook_url);
     
     try {
+      // Get the current session ID from the config
+      // This assumes currentSessionId is passed in the config object
       // Format the request data to match the example in examples/chat-widget.js
       const requestData = {
         action: "sendMessage",
-        sessionId: config.sessionId || 'default-session',
+        sessionId: config.currentSessionId || 'default-session',
         route: config.webhook_route || "general",
         chatInput: message,
         metadata: {

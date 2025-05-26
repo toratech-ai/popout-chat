@@ -107,7 +107,9 @@ function init(customConfig) {
   widgetElements.sendButton.addEventListener('click', () => {
     const message = widgetElements.textarea.value.trim();
     if (message) {
-      sendMessage(widgetElements, message, addMessageToDisplay, log, config);
+      // Include the current session ID in the config object
+      const configWithSession = { ...config, currentSessionId };
+      sendMessage(widgetElements, message, addMessageToDisplay, log, configWithSession);
       widgetElements.textarea.value = '';
     }
   });
@@ -117,7 +119,9 @@ function init(customConfig) {
       e.preventDefault();
       const message = widgetElements.textarea.value.trim();
       if (message) {
-        sendMessage(widgetElements, message, addMessageToDisplay, log, config);
+        // Include the current session ID in the config object
+        const configWithSession = { ...config, currentSessionId };
+        sendMessage(widgetElements, message, addMessageToDisplay, log, configWithSession);
         widgetElements.textarea.value = '';
       }
     }
