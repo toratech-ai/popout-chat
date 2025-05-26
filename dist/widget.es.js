@@ -36,8 +36,7 @@ const DEFAULT_CONFIG = {
     // Will default to primaryColor if empty in the logic
     botBubbleColor: "#f0f0f0"
   },
-  webhook_url: "",
-  webhook_route: ""
+  webhook_url: ""
 };
 /**
  * Toratech AI Chat Widget - Styles
@@ -254,16 +253,12 @@ const WIDGET_STYLES = `.toratech-chat-widget {
     flex-grow: 1;
     border: 1px solid #ddd;
     border-radius: 20px;
-    padding: 10px 15px;
+    padding: 11px 15px 9px 15px;
     font-size: 14px;
-    line-height: 1.4;
-    box-sizing: border-box;
-    height: 50px;
-    min-height: 50px;
-    min-width: 0;
+    line-height: 16px;
     resize: none;
+    box-sizing: border-box;
     font-family: inherit;
-    overflow-y: hidden;
   }
 
   .toratech-chat-widget .chat-input textarea:focus {
@@ -531,11 +526,7 @@ async function sendMessage(elements, message, addMessageFunc, logFunc, config2) 
       const requestData = {
         action: "sendMessage",
         sessionId: config2.currentSessionId || "default-session",
-        route: config2.webhook_route || "general",
-        chatInput: message,
-        metadata: {
-          userId: ""
-        }
+        chatInput: message
       };
       const response = await fetch(config2.webhook_url, {
         method: "POST",
