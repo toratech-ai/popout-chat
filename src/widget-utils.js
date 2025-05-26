@@ -46,9 +46,14 @@ export function log(message, type = 'info', config) {
 }
 
 /**
- * Generates a unique session ID.
+ * Generates a unique session ID using crypto.randomUUID() if available, with fallback to timestamp + random string.
  * @returns {string} A unique session ID.
  */
 export function generateSessionId() {
+  // Use crypto.randomUUID() if available (modern browsers)
+  if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+    return crypto.randomUUID();
+  }
+  // Fallback for older browsers
   return 'tt_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
 }

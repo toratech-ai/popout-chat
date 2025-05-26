@@ -377,6 +377,9 @@ function log$1(message, type = "info", config2) {
   }
 }
 function generateSessionId() {
+  if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
+    return crypto.randomUUID();
+  }
   return "tt_" + Date.now() + "_" + Math.random().toString(36).substr(2, 9);
 }
 function injectStyles(config2, baseStyles, stylesId, logFunc) {
