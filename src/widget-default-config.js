@@ -25,5 +25,4 @@ export const DEFAULT_CONFIG = {
     botBubbleColor: '#f0f0f0'
   },
   webhook_url: '',
-  webhook_route: ''
 };

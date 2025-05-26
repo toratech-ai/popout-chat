@@ -213,11 +213,7 @@ export async function sendMessage(elements, message, addMessageFunc, logFunc, co
       const requestData = {
         action: "sendMessage",
         sessionId: config.currentSessionId || 'default-session',
-        route: config.webhook_route || "general",
-        chatInput: message,
-        metadata: {
-          userId: ""
-        }
+        chatInput: message
       };
       
       const response = await fetch(config.webhook_url, {
