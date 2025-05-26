@@ -107,7 +107,7 @@ function init(customConfig) {
   widgetElements.sendButton.addEventListener('click', () => {
     const message = widgetElements.textarea.value.trim();
     if (message) {
-      sendMessage(widgetElements, message, addMessageToDisplay, log);
+      sendMessage(widgetElements, message, addMessageToDisplay, log, config);
       widgetElements.textarea.value = '';
     }
   });
@@ -117,7 +117,7 @@ function init(customConfig) {
       e.preventDefault();
       const message = widgetElements.textarea.value.trim();
       if (message) {
-        sendMessage(widgetElements, message, addMessageToDisplay, log);
+        sendMessage(widgetElements, message, addMessageToDisplay, log, config);
         widgetElements.textarea.value = '';
       }
     }

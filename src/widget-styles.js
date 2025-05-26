@@ -10,6 +10,8 @@ export const WIDGET_STYLES =
     --chat-color-secondary: var(--toratech-chat-secondary-color, #004d99);
     --chat-color-background: var(--toratech-chat-background-color, #ffffff);
     --chat-color-font: var(--toratech-chat-font-color, #333333);
+    --chat-color-user-bubble: var(--toratech-chat-user-bubble-color, var(--chat-color-primary));
+    --chat-color-bot-bubble: var(--toratech-chat-bot-bubble-color, #f0f0f0);
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   }
 
@@ -20,8 +22,8 @@ export const WIDGET_STYLES =
     z-index: 9999;
     display: none;
     flex-direction: column;
-    width: 350px;
-    height: 500px;
+    width: 400px;
+    height: 550px;
     max-height: 80vh;
     background-color: var(--chat-color-background);
     border-radius: 10px;
@@ -156,21 +158,21 @@ export const WIDGET_STYLES =
 
   .toratech-chat-widget .chat-message.user {
     align-self: flex-end;
-    background-color: var(--chat-color-primary);
+    background-color: var(--chat-color-user-bubble);
     color: white;
     border-bottom-right-radius: 5px;
   }
 
   .toratech-chat-widget .chat-message.bot {
     align-self: flex-start;
-    background-color: #f0f0f0;
+    background-color: var(--chat-color-bot-bubble);
     color: var(--chat-color-font);
     border-bottom-left-radius: 5px;
   }
 
   .toratech-chat-widget .bot-typing {
     align-self: flex-start;
-    background-color: #f0f0f0;
+    background-color: var(--chat-color-bot-bubble);
     color: var(--chat-color-font);
     border-radius: 18px;
     border-bottom-left-radius: 5px;
@@ -206,23 +208,28 @@ export const WIDGET_STYLES =
     display: flex;
     padding: 10px;
     border-top: 1px solid #eee;
+    align-items: center;
   }
 
-  .toratech-chat-widget textarea {
+  .toratech-chat-widget .chat-input textarea {
     flex-grow: 1;
     border: 1px solid #ddd;
     border-radius: 20px;
     padding: 10px 15px;
+    font-size: 14px;
+    line-height: 1.4;
+    box-sizing: border-box;
+    height: 50px;
+    min-height: 50px;
+    min-width: 0;
     resize: none;
     font-family: inherit;
-    font-size: 14px;
-    outline: none;
-    max-height: 100px;
-    min-height: 40px;
+    overflow-y: hidden;
   }
 
-  .toratech-chat-widget textarea:focus {
+  .toratech-chat-widget .chat-input textarea:focus {
     border-color: var(--chat-color-primary);
+    outline: none;
   }
 
   .toratech-chat-widget .chat-input button {
@@ -232,12 +239,13 @@ export const WIDGET_STYLES =
     border-radius: 50%;
     width: 40px;
     height: 40px;
+    padding: 0;
     margin-left: 10px;
     cursor: pointer;
+    transition: background-color 0.2s;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: background-color 0.2s;
   }
 
   .toratech-chat-widget .chat-input button:hover {

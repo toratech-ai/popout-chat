@@ -1,6 +1,9 @@
 import { defineConfig } from 'vite';
 import { resolve } from 'path';
 
+// Determine if we're building for production
+const isProd = process.env.NODE_ENV === 'production';
+
 export default defineConfig({
   plugins: [],
   build: {
@@ -19,7 +22,7 @@ export default defineConfig({
       }
     },
     minify: 'terser',
-    sourcemap: true
+    sourcemap: !isProd // Only generate source maps for development builds
   },
   server: {
     port: 3000,

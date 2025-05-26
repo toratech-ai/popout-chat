@@ -160,7 +160,7 @@ export async function initiateNewConversationSession(config, logFunc, generateSe
   const requestData = [{
     action: "loadPreviousSession", // Or a specific 'startNewSession' action if API supports
     sessionId: newSessionId,
-    route: "general", // Or as per config
+    route: config.webhook_route || "general", // Use configured route or fallback
     metadata: {
       userId: "" // Or a user identifier if available
     }
@@ -320,9 +320,10 @@ export async function startNewConversation(elements, generateSessionIdFunc, setS
  * @param {string} message - The message text to send.
  * @param {Function} addMessageFunc - Function to add a message to the display.
  * @param {Function} logFunc - Optional logging function.
+ * @param {Object} config - The widget configuration object.
  * @returns {Promise<void>}
  */
-export async function sendMessage(elements, message, addMessageFunc, logFunc) {
+export async function sendMessage(elements, message, addMessageFunc, logFunc, config) {
   if (!message.trim()) return;
   
   if (logFunc) logFunc(`Sending message: ${message}`);
@@ -338,17 +339,90 @@ export async function sendMessage(elements, message, addMessageFunc, logFunc) {
   elements.messagesContainer.appendChild(typingIndicator);
   elements.messagesContainer.scrollTop = elements.messagesContainer.scrollHeight;
   
-  // For demo purposes, simulate a delay and then respond
-  setTimeout(() => {
-    // Remove typing indicator
-    elements.messagesContainer.removeChild(typingIndicator);
+  // If webhook_url is configured, send the message to the webhook
+  if (config && config.webhook_url) {
+    if (logFunc) logFunc('Sending message to webhook: ' + config.webhook_url);
     
-    // Add bot response
-    addMessageFunc(
-      elements.messagesContainer, 
-      `You said: "${message}". This is a demo response from Toratech AI.`, 
-      'bot',
-      logFunc
-    );
-  }, 1500);
+    try {
+      // Format the request data to match the example in examples/chat-widget.js
+      const requestData = {
+        action: "sendMessage",
+        sessionId: config.sessionId || 'default-session',
+        route: config.webhook_route || "general",
+        chatInput: message,
+        metadata: {
+          userId: ""
+        }
+      };
+      
+      const response = await fetch(config.webhook_url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(requestData)
+      });
+      
+      // Remove typing indicator
+      if (elements.messagesContainer.contains(typingIndicator)) {
+        elements.messagesContainer.removeChild(typingIndicator);
+      }
+      
+      if (!response.ok) {
+        throw new Error(`Webhook responded with status: ${response.status}`);
+      }
+      
+      const responseData = await response.json();
+      
+      // Extract the bot message from the response using the format from the example
+      let botMessage = '';
+      if (Array.isArray(responseData) && responseData.length > 0) {
+        botMessage = responseData[0].output;
+      } else if (responseData.output) {
+        botMessage = responseData.output;
+      } else if (typeof responseData === 'string') {
+        botMessage = responseData;
+      } else {
+        // Fallback options if the expected format isn't found
+        botMessage = responseData.message || responseData.response || responseData.text || 
+                    responseData.content || JSON.stringify(responseData);
+      }
+      
+      // Display the bot response
+      addMessageFunc(elements.messagesContainer, botMessage, 'bot', logFunc);
+      if (logFunc) logFunc('Received response from webhook');
+      
+    } catch (error) {
+      // Remove typing indicator if still present
+      if (elements.messagesContainer.contains(typingIndicator)) {
+        elements.messagesContainer.removeChild(typingIndicator);
+      }
+      
+      if (logFunc) logFunc('Error sending message to webhook: ' + error.message, 'error');
+      
+      // Display error message to user
+      addMessageFunc(
+        elements.messagesContainer,
+        'Sorry, I couldn\'t connect to the chat service. Please try again later.',
+        'bot',
+        logFunc
+      );
+    }
+  } else {
+    // Fallback to demo response if no webhook_url is configured
+    setTimeout(() => {
+      // Remove typing indicator
+      if (elements.messagesContainer.contains(typingIndicator)) {
+        elements.messagesContainer.removeChild(typingIndicator);
+      }
+      
+      // Add demo bot response
+      addMessageFunc(
+        elements.messagesContainer, 
+        `You said: "${message}". This is a demo response from Toratech AI.`, 
+        'bot',
+        logFunc
+      );
+    }, 1500);
+  }
 }

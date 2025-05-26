@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Toratech AI Widget - Minimal Example</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background: #f5f5f5;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .btn {
+            background: #338AFF;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        .btn:hover { background: #2072E8; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Toratech AI Widget - Minimal Example</h1>
+        <p>This demonstrates the basic usage of the Toratech AI pop-out chat widget.</p>
+        
+        <div id="preset-selector" style="margin-bottom: 20px; padding: 10px; border: 1px solid #eee; border-radius: 5px;">
+            <h3>Select a Widget Preset:</h3>
+            <button onclick="applyPreset('default')">Default Toratech</button>
+            <button onclick="applyPreset('darkMode')">Minimal Dark</button>
+            <button onclick="applyPreset('brightMode')">Bright & Simple</button>
+        </div>
+        
+        <p>The chat widget will appear in the bottom-right corner.</p>
+    </div>
+
+    <!-- Widget Configuration Presets -->
+    <script>
+        const widgetPresets = {
+            default: {
+                branding: {
+                    logo: 'https://cdn.toratech.com/assets/default-logo.png',
+                    name: 'Toratech AI Support',
+                    welcomeText: 'Hi! How can we help you today?',
+                    responseTimeText: 'We typically respond quickly.',
+                    poweredBy: { text: 'Powered by Toratech AI', link: 'https://toratech.ai' }
+                },
+                style: {
+                    primaryColor: '#0066cc', // Default primary
+                    secondaryColor: '#004d99',
+                    backgroundColor: '#ffffff',
+                    fontColor: '#333333',
+                    userBubbleColor: '', // Demonstrates fallback to primaryColor
+                    botBubbleColor: '#EAEAEA', // A slightly different light grey for default
+                    position: 'right'
+                },
+                webhook_url: 'https://luccatora.app.n8n.cloud/webhook/e20c3a9c-8b20-4e47-82c4-61bb7207b07e/chat'
+            },
+            darkMode: {
+                branding: {
+                    logo: 'https://cdn.toratech.com/assets/logo-dark-mode.png', // Placeholder for a dark mode logo
+                    name: 'Tech Support Bot',
+                    welcomeText: 'System online. How can I assist?',
+                    responseTimeText: 'Online now.',
+                    poweredBy: { text: 'AI Core by Toratech', link: 'https://toratech.ai' }
+                },
+                style: {
+                    primaryColor: '#7F5AF0', // A nice purple for dark mode
+                    secondaryColor: '#6A48D4',
+                    backgroundColor: '#16161a', // Dark background
+                    fontColor: '#fffffe', // Light font
+                    userBubbleColor: '#7F5AF0', // Explicitly same as primary for dark mode
+                    botBubbleColor: '#2d2d30', // Darker grey for bot bubbles
+                    position: 'right'
+                },
+                webhook_url: 'https://luccatora.app.n8n.cloud/webhook/e20c3a9c-8b20-4e47-82c4-61bb7207b07e/chat'
+            },
+            brightMode: {
+                branding: {
+                    logo: 'https://cdn.toratech.com/assets/logo-bright.png', // Placeholder for a bright mode logo
+                    name: 'Your Helper Pal',
+                    welcomeText: 'Hey! Got questions? I have answers!',
+                    responseTimeText: 'Happy to help!',
+                    poweredBy: { text: 'Chat by Toratech', link: 'https://toratech.ai' }
+                },
+                style: {
+                    primaryColor: '#FF6B6B', // A bright coral color
+                    secondaryColor: '#E05252',
+                    backgroundColor: '#F9F9F9', // Off-white background
+                    fontColor: '#2A2A2A',
+                    userBubbleColor: '#FF8787', // A slightly lighter coral for user bubbles
+                    botBubbleColor: '#DEDEDE', // Medium grey for bot bubbles
+                    position: 'left' // Example of changing position
+                },
+                webhook_url: 'https://luccatora.app.n8n.cloud/webhook/e20c3a9c-8b20-4e47-82c4-61bb7207b07e/chat'
+            }
+        };
+
+        // Function to apply a preset
+        function applyPreset(presetName) {
+            if (window.MyPopoutWidget && typeof window.MyPopoutWidget.destroy === 'function') {
+                window.MyPopoutWidget.destroy();
+            }
+            window.ChatWidgetConfig = widgetPresets[presetName];
+            // The widget script (widget.umd.js) will pick up the new ChatWidgetConfig upon re-initialization.
+            // If MyPopoutWidget.init() was designed to be callable multiple times for re-init, we'd call it here.
+            // For now, assuming the script re-initializes or we might need to reload the script or call init if available.
+            // Let's try to re-initialize if the main script has already loaded and exposed MyPopoutWidget.
+            if (window.MyPopoutWidget && typeof window.MyPopoutWidget.init === 'function') {
+                // Ensure the old widget is fully gone from DOM before re-init if destroy doesn't handle it completely
+                const oldWidgetElement = document.getElementById('toratech-chat-widget'); 
+                if (oldWidgetElement) oldWidgetElement.remove();
+                const oldStyles = document.getElementById('toratech-chat-styles'); 
+                if (oldStyles) oldStyles.remove();
+
+                window.MyPopoutWidget.init(window.ChatWidgetConfig);
+            } else {
+                // If MyPopoutWidget isn't available yet, ChatWidgetConfig is set, and the script will use it when it loads.
+                // This case handles the initial load.
+                console.log('Widget API not ready for re-init, ChatWidgetConfig set for initial load.');
+            }
+            console.log(`Applied preset: ${presetName}`);
+        }
+
+        // Set a default preset on initial load
+        applyPreset('default');
+
+    </script>
+
+    <!-- Load bundled widget script -->
+    <script src="https://cdn.jsdelivr.net/gh/toratech-ai/popout-chat@main/dist/widget.umd.js"></script>
+</body>
+</html>

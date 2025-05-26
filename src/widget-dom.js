@@ -37,17 +37,23 @@ export function createWidgetElements(config, widgetId, toggleId, containerId, lo
   widgetContainer.style.setProperty('--toratech-chat-secondary-color', config.style.secondaryColor);
   widgetContainer.style.setProperty('--toratech-chat-background-color', config.style.backgroundColor);
   widgetContainer.style.setProperty('--toratech-chat-font-color', config.style.fontColor);
+  widgetContainer.style.setProperty('--toratech-chat-user-bubble-color', config.style.userBubbleColor || config.style.primaryColor);
+  widgetContainer.style.setProperty('--toratech-chat-bot-bubble-color', config.style.botBubbleColor);
 
   const chatContainer = document.createElement('div');
   chatContainer.id = containerId;
   chatContainer.className = `chat-container${config.style.position === 'left' ? ' position-left' : ''}`;
   
-  const newConversationHTML = `
+  // Create a single brand header that will be shared
+  const brandHeaderHTML = `
     <div class="brand-header">
       <img src="${config.branding.logo}" alt="${config.branding.name}">
       <span>${config.branding.name}</span>
       <button class="close-button" aria-label="Close chat" title="Close chat" tabindex="0">×</button>
     </div>
+  `;
+
+  const newConversationHTML = `
     <div class="new-conversation">
       <h2 class="welcome-text">${config.branding.welcomeText}</h2>
       <button class="new-chat-btn">
@@ -62,11 +68,6 @@ export function createWidgetElements(config, widgetId, toggleId, containerId, lo
 
   const chatInterfaceHTML = `
     <div class="chat-interface">
-      <div class="brand-header">
-        <img src="${config.branding.logo}" alt="${config.branding.name}">
-        <span>${config.branding.name}</span>
-        <button class="close-button" aria-label="Close chat" title="Close chat" tabindex="0">×</button>
-      </div>
       <div class="chat-messages"></div>
       <div class="chat-input">
         <textarea 
@@ -80,7 +81,11 @@ export function createWidgetElements(config, widgetId, toggleId, containerId, lo
           aria-label="Send message"
           title="Send message"
           tabindex="0"
-        >Send</button>
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor" style="display: block; margin: auto;">
+            <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+          </svg>
+        </button>
       </div>
       <div class="chat-footer">
         <a href="${config.branding.poweredBy.link}" target="_blank">${config.branding.poweredBy.text}</a>
@@ -88,7 +93,7 @@ export function createWidgetElements(config, widgetId, toggleId, containerId, lo
     </div>
   `;
   
-  chatContainer.innerHTML = newConversationHTML + chatInterfaceHTML;
+  chatContainer.innerHTML = brandHeaderHTML + newConversationHTML + chatInterfaceHTML;
   
   const toggleButton = document.createElement('button');
   toggleButton.id = toggleId;

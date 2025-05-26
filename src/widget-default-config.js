@@ -20,18 +20,10 @@ export const DEFAULT_CONFIG = {
     secondaryColor: '#2072E8',
     position: 'right',
     backgroundColor: '#ffffff',
-    fontColor: '#333333'
+    fontColor: '#333333',
+    userBubbleColor: '', // Will default to primaryColor if empty in the logic
+    botBubbleColor: '#f0f0f0'
   },
-  advanced: {
-    autoInit: true,
-    debug: false,
-    zIndex: 9999,
-    storageKey: 'toratech_chat_prefs',
-    apiVersion: 'v1',
-    allowProgrammaticOpen: false // Whether to allow opening the widget programmatically
-  },
-  webhook: {
-    url: '',
-    route: ''
-  }
+  webhook_url: '',
+  webhook_route: ''
 };
