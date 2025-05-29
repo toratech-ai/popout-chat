@@ -64,43 +64,37 @@ Then you would typically import it into your project's build process.
 <body>
     <!-- Your website content -->
     
-    <!-- Load the widget (latest from 'main' branch) -->
-    <script src="https://cdn.jsdelivr.net/gh/toratech-ai/popout-chat@main/dist/widget.umd.js"></script>
     <script>
-        // Initialize with default settings
-        MyPopoutWidget.init();
+      // Define the widget configuration
+      window.ChatWidgetConfig = {
+        branding: {
+          logo: 'https://media.licdn.com/dms/image/v2/D4E0BAQFRPXC4w25iOw/company-logo_200_200/B4EZVtx7beHgAI-/0/1741303560536?e=1753920000&v=beta&t=O5rXoHWyJde0nyoQSufeEyMwZpEF8vMEcOI9SOIXxUg',
+          name: 'Toratech AI Support',
+          welcomeText: 'Hi! How can we help you today?',
+          responseTimeText: 'We typically respond quickly.',
+          poweredBy: { text: 'Powered by Toratech AI', link: 'https://toratech.ai' }
+        },
+        style: {
+          primaryColor: '#338AFF',
+          secondaryColor: '#2072E8',
+          backgroundColor: '#ffffff',
+          fontColor: '#000000',
+          botBubbleColor: '#EAEAEA',
+          position: 'right'
+        },
+        webhook_url: 'https://luccatora.app.n8n.cloud/webhook/e20c3a9c-8b20-4e47-82c4-61bb7207b07e/chat',
+        advanced: {
+          autoInit: true,
+          debug: true
+        }
+      };
     </script>
+
+    <!-- Load bundled widget script -->
+    <script src="https://cdn.jsdelivr.net/gh/toratech-ai/popout-chat@main/dist/widget.umd.js"></script>
 </body>
 </html>
 ```
-
-## ⚙️ Configuration
-
-<script>
-  // Define the widget configuration
-  window.ChatWidgetConfig = {
-    branding: {
-      logo: 'https://media.licdn.com/dms/image/v2/D4E0BAQFRPXC4w25iOw/company-logo_200_200/B4EZVtx7beHgAI-/0/1741303560536?e=1753920000&v=beta&t=O5rXoHWyJde0nyoQSufeEyMwZpEF8vMEcOI9SOIXxUg',
-      name: 'Toratech AI Support',
-      welcomeText: 'Hi! How can we help you today?',
-      responseTimeText: 'We typically respond quickly.',
-      poweredBy: { text: 'Powered by Toratech AI', link: 'https://toratech.ai' }
-    },
-    style: {
-      primaryColor: '#338AFF',
-      secondaryColor: '#2072E8',
-      backgroundColor: '#ffffff',
-      fontColor: '#000000',
-      botBubbleColor: '#EAEAEA',
-      position: 'right'
-    },
-    webhook_url: 'https://luccatora.app.n8n.cloud/webhook/e20c3a9c-8b20-4e47-82c4-61bb7207b07e/chat',
-    advanced: {
-      autoInit: true,
-      debug: true
-    }
-  };
-</script>
 
 ## 📋 API Reference
 
