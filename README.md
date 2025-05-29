@@ -82,11 +82,7 @@ Then you would typically import it into your project's build process.
           botBubbleColor: '#EAEAEA',
           position: 'right'
         },
-        webhook_url: 'https://luccatora.app.n8n.cloud/webhook/e20c3a9c-8b20-4e47-82c4-61bb7207b07e/chat',
-        advanced: {
-          autoInit: true,
-          debug: true
-        }
+        webhook_url: 'https://luccatora.app.n8n.cloud/webhook/e20c3a9c-8b20-4e47-82c4-61bb7207b07e/chat'
       };
     </script>
 
