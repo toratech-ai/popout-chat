@@ -76,31 +76,31 @@ Then you would typically import it into your project's build process.
 
 ## ⚙️ Configuration
 
-```javascript
-MyPopoutWidget.init({
-  branding: {
-    logo: 'https://your-domain.com/logo.png',
-    name: 'Toratech AI Support Team',
-    welcomeText: 'Hi there! 👋 How can we help you today?',
-    responseTimeText: 'We typically respond within minutes.'
-  },
-  style: {
-    primaryColor: '#338AFF',
-    secondaryColor: '#2072E8',
-    position: 'right', // 'left' or 'right'
-    backgroundColor: '#ffffff',
-    fontColor: '#333333'
-  },
-  advanced: {
-    autoInit: true,
-    debug: false,
-    zIndex: 9999,
-    storageKey: 'toratech_chat_prefs',
-    apiVersion: 'v1'
-  },
-  webhook_url: 'https://your-backend.com/webhook/chat'
-});
-```
+<script>
+  // Define the widget configuration
+  window.ChatWidgetConfig = {
+    branding: {
+      logo: 'https://media.licdn.com/dms/image/v2/D4E0BAQFRPXC4w25iOw/company-logo_200_200/B4EZVtx7beHgAI-/0/1741303560536?e=1753920000&v=beta&t=O5rXoHWyJde0nyoQSufeEyMwZpEF8vMEcOI9SOIXxUg',
+      name: 'Toratech AI Support',
+      welcomeText: 'Hi! How can we help you today?',
+      responseTimeText: 'We typically respond quickly.',
+      poweredBy: { text: 'Powered by Toratech AI', link: 'https://toratech.ai' }
+    },
+    style: {
+      primaryColor: '#338AFF',
+      secondaryColor: '#2072E8',
+      backgroundColor: '#ffffff',
+      fontColor: '#333333',
+      botBubbleColor: '#EAEAEA',
+      position: 'right'
+    },
+    webhook_url: 'https://luccatora.app.n8n.cloud/webhook/e20c3a9c-8b20-4e47-82c4-61bb7207b07e/chat',
+    advanced: {
+      autoInit: true,
+      debug: true
+    }
+  };
+</script>
 
 ## 📋 API Reference
 
