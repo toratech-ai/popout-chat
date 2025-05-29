@@ -90,7 +90,7 @@ Then you would typically import it into your project's build process.
       primaryColor: '#338AFF',
       secondaryColor: '#2072E8',
       backgroundColor: '#ffffff',
-      fontColor: '#333333',
+      fontColor: '#000000',
       botBubbleColor: '#EAEAEA',
       position: 'right'
     },
